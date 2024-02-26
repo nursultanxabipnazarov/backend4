@@ -3,34 +3,39 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+
+
 use Illuminate\Http\Request;
 
 
 class PostController extends Controller
-{
-
+{   
     public function index(){
-         $posts =  Post::get();
-        
-         dd($posts);
-         
+       $posts =   Post::all();
+        return view('index',compact('posts'));
     }
 
     public function create(){
-        return view('admin.post-create');
+       return view('post-create');
     }
 
-
     public function store(Request $request){
-        $title = $request->title;
-        $body = $request->body;
-        Post::create([
-            'title'=>$title,
-            'body'=> $body
+   
+        $validated = $request->validate([
+            'title'=>'required',
+            'text'=>'required'
         ]);
 
-        return redirect()->route('postCreate');
+        Post::create($request->all());
+
+        return redirect()->back()->with('message',"post created successfuly!");
+
+        
 
 
+
+
+
+     
     }
 }
